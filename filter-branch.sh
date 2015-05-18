@@ -8,11 +8,11 @@ fail() { echo "Fatal error: $@." >&2; exit 1; }
 
 git_repo_sweep()
 {
-  # be sure we won't need the original refs from a previous filter-branch before doing the sweep
+  # be sure you won't need the original refs from a previous filter-branch before doing the sweep
   git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
 }
 
-# the basic steps we're going to perform
+# all the basic steps we're going to perform
 git_index_info_list() { git ls-files -s; }
 git_index_info_path_prepend() { [ -z $1 ] && fail "Nothing to prepend"; sed s-$'\t'-$'\t'${1%%/}/-; }
 git_index_info_rewrite()
@@ -20,7 +20,7 @@ git_index_info_rewrite()
   local index="$GIT_INDEX_FILE"
   local temporary="$index.rewrite"
 
-  [ -z "$index" ] && fail "Use exclusively from a git-filter-branch context"
+  [ -z "$index" ] && fail "To be used in a git-filter-branch context"
 
   [ -e "$temporary" ] && fail "$temporary: Index file already exists"
 
